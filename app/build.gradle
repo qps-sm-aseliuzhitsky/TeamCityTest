@@ -40,7 +40,7 @@ publishing {
             // Don't forget to change these
             groupId 'com.smule'
             artifactId 'teamcity-test'
-            version '1.0.0'
+            version '1.0.1'
 
             artifact(bundleAppClassesRelease)
 //            artifact(androidSourcesJar)
@@ -72,7 +72,7 @@ publishing {
             // Don't forget to change these
             groupId 'com.smule'
             artifactId 'teamcity-test-debug'
-            version '1.0.0'
+            version '1.0.1'
 
             artifact(bundleAppClassesDebug)
 //            artifact(androidSourcesJar)
@@ -104,7 +104,7 @@ publishing {
         maven {
             credentials {
                 username 'user_write_smule'
-                password 'smulemwriter'
+                password 'smulewriter'
             }
             url 'http://192.168.88.72:8081/nexus/content/repositories/smule.com/'
         }
