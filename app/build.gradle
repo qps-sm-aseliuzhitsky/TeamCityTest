@@ -26,3 +26,87 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
+
+apply plugin: 'maven-publish'
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+publishing {
+    publications {
+        appRelease(MavenPublication) {
+            // Don't forget to change these
+            groupId 'com.smule'
+            artifactId 'teamcity-test'
+            version '1.0.0'
+
+            artifact(bundleAppClassesRelease)
+//            artifact(androidSourcesJar)
+
+            pom.withXml {
+                final dependenciesNode = asNode().appendNode('dependencies')
+
+                ext.addDependency = { Dependency dep, String scope ->
+                    if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified")
+                        return // ignore invalid dependencies
+
+                    final dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', dep.group)
+                    dependencyNode.appendNode('artifactId', dep.name)
+                    dependencyNode.appendNode('version', dep.version)
+                    dependencyNode.appendNode('scope', scope)
+                }
+
+                // List all "compile" dependencies (for old Gradle)
+                configurations.compile.getAllDependencies().each { dep -> addDependency(dep, "compile") }
+                // List all "api" dependencies (for new Gradle) as "compile" dependencies
+                configurations.api.getAllDependencies().each { dep -> addDependency(dep, "compile") }
+                // List all "implementation" dependencies (for new Gradle) as "runtime" dependencies
+                configurations.implementation.getAllDependencies().each { dep -> addDependency(dep, "runtime") }
+            }
+        }
+
+        appDebug(MavenPublication) {
+            // Don't forget to change these
+            groupId 'com.smule'
+            artifactId 'teamcity-test-debug'
+            version '1.0.0'
+
+            artifact(bundleAppClassesDebug)
+//            artifact(androidSourcesJar)
+
+            pom.withXml {
+                final dependenciesNode = asNode().appendNode('dependencies')
+
+                ext.addDependency = { Dependency dep, String scope ->
+                    if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified")
+                        return // ignore invalid dependencies
+
+                    final dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', dep.group)
+                    dependencyNode.appendNode('artifactId', dep.name)
+                    dependencyNode.appendNode('version', dep.version)
+                    dependencyNode.appendNode('scope', scope)
+                }
+
+                // List all "compile" dependencies (for old Gradle)
+                configurations.compile.getAllDependencies().each { dep -> addDependency(dep, "compile") }
+                // List all "api" dependencies (for new Gradle) as "compile" dependencies
+                configurations.api.getAllDependencies().each { dep -> addDependency(dep, "compile") }
+                // List all "implementation" dependencies (for new Gradle) as "runtime" dependencies
+                configurations.implementation.getAllDependencies().each { dep -> addDependency(dep, "runtime") }
+            }
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username 'smule'
+                password 'smulewatcher'
+            }
+            url 'http://127.0.0.1:8081/nexus/content/repositories/smule.com/'
+        }
+    }
+}
