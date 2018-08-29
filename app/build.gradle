@@ -106,7 +106,7 @@ publishing {
                 username 'smule'
                 password 'smulewatcher'
             }
-            url 'http://37.17.54.21:8899/nexus/content/repositories/smule.com/'
+            url 'http://192.168.88.72:8081/nexus/content/repositories/smule.com/'
         }
     }
 }
