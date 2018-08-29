@@ -103,8 +103,8 @@ publishing {
     repositories {
         maven {
             credentials {
-                username 'smule'
-                password 'smulewatcher'
+                username 'admin'
+                password 'smulem1rror'
             }
             url 'http://192.168.88.72:8081/nexus/content/repositories/smule.com/'
         }
